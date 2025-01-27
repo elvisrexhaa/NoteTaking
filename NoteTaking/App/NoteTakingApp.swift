@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct NoteTakingApp: App {
@@ -13,5 +14,7 @@ struct NoteTakingApp: App {
         WindowGroup {
             HomeView()
         }
+        .modelContainer(for: Note.self)
     }
+    
 }

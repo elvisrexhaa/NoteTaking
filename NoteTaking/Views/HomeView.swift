@@ -18,9 +18,8 @@ struct HomeView: View {
         ]
         
         UINavigationBar.appearance().standardAppearance = appearance
-        
-        
     }
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -44,10 +43,11 @@ struct HomeView: View {
                 addNoteButton
             }
             .sheet(isPresented: $showAddNoteView) {
-                Text("Add note here")
-                    .font(.title)
+                NavigationStack {
+                    AddNoteView()
+                        .padding(.top)
+                }
             }
-            
         }
     }
 }
