@@ -16,4 +16,21 @@ enum Tags: String, CaseIterable {
     case shopping = "Shopping"
     case health = "Health"
     case travel = "Travel"
+    
+    var tagColor: Color {
+        switch self {
+        case .journal:
+            return .blue
+        case .work:
+            return .green
+        case .ideas:
+            return .yellow
+        case .shopping:
+            return .orange
+        case .health:
+            return .red
+        case .travel:
+            return .purple
+        }
+    }
 }

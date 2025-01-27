@@ -48,6 +48,7 @@ struct AddNoteView: View {
     
     private func addTags(tag: Tags) {
         // check if tag exists in array
+        
         if selectedTags.contains(tag) {
             selectedTags.remove(tag)
         } else {
@@ -80,14 +81,14 @@ extension AddNoteView {
                     selectedTags.contains(tag)
                 }
                 Text(tag.rawValue)
-                    .font(.subheadline)
+                    .font(.footnote)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 20)
-                    .background(isTagSelected ? Color.purple.opacity(0.2) : Color.gray.opacity(0.2), in: .rect(cornerRadius: 10))
-                    .lineLimit(1)
+                    .background(isTagSelected ? tag.tagColor.opacity(0.2) : Color.gray.opacity(0.2), in: .rect(cornerRadius: 10))
+//                    .lineLimit(1)
                     .overlay(content: {
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.purple, lineWidth: isTagSelected ? 2 : 0)
+                            .stroke(tag.tagColor, lineWidth: isTagSelected ? 2 : 0)
                     })
                     .onTapGesture {
                         withAnimation(.smooth) {
@@ -109,7 +110,7 @@ extension AddNoteView {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 16)
-        .background(Color.purple, in: .rect(cornerRadius: 10))
+        .background(.thinMaterial, in: .rect(cornerRadius: 10))
         .padding(.horizontal, 30)
         .buttonStyle(.plain)
         .padding(.top, 20)

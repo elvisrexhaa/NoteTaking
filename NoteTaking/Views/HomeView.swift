@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     
     @State private var showAddNoteView: Bool = false
+    @Environment(\.modelContext) private var ctx
+    @Query(sort: \Note.noteAdded) var notes: [Note]
     
     init() {
         let appearance = UINavigationBarAppearance()
@@ -24,6 +27,15 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 // list of notes
+                if notes.isEmpty {
+                    ContentUnavailableView("No notes available yet.", systemImage: "square.stack.3d.up.slash", description: Text("Press the button below to add a note"))
+                        
+                } else {
+                    ForEach(notes) { note in
+                        // TODO: note cell
+                        NoteCell(note: note)
+                    }
+                }
                 
             }
             .toolbar {
@@ -45,7 +57,7 @@ struct HomeView: View {
             .sheet(isPresented: $showAddNoteView) {
                 NavigationStack {
                     AddNoteView()
-                        .padding(.top)
+                       
                 }
             }
         }
@@ -53,7 +65,10 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    let preview = PreviewContainer()
+    preview.addNotes(notes: Note.sampleNotes)
+    return HomeView()
+        .modelContainer(preview.container)
 }
 
 

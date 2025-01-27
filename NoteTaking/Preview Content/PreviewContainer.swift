@@ -28,6 +28,12 @@ struct PreviewContainer {
             container.mainContext.insert(note)
         }
     }
+    
+    @MainActor
+    func addSingularNote(note: Note) {
+            container.mainContext.insert(note)
+        
+    }
 }
 
 
