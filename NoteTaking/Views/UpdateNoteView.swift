@@ -1,31 +1,25 @@
 //
-//  AddNoteView.swift
+//  UpdateNoteView.swift
 //  NoteTaking
 //
 //  Created by Elvis Rexha on 27/01/2025.
 //
 
 import SwiftUI
+import SwiftData
 
-struct AddNoteView: View {
-    // MARK: State properties for adding notes
-    @State private var noteTitle: String = ""
-    @State private var noteContent: String = ""
-    @State private var noteAdded: Date = .now
-    @State private var selectedTags: Set<Tags> = []
-    
-    // MARK: Environment properties
-    @Environment(\.modelContext) private var ctx
+struct UpdateNoteView: View {
+    @Bindable var note: Note
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         VStack(spacing: 12) {
-            CustomTextField(placeholder: "Note title", textBinding: $noteTitle)
+            CustomTextField(placeholder: "Note title", textBinding: $note.noteTitle)
             
-            CustomTextField(placeholder: "Note content" ,textBinding: $noteContent)
+            CustomTextField(placeholder: "Note content" ,textBinding: $note.noteContent)
                 .lineLimit(8, reservesSpace: true)
             
-            DatePicker("Date:", selection: $noteAdded, displayedComponents: [.date, .hourAndMinute])
+            DatePicker("Date:", selection: $note.noteAdded, displayedComponents: [.date, .hourAndMinute])
                 .padding(.horizontal)
                 .foregroundStyle(.primary)
             
@@ -34,50 +28,29 @@ struct AddNoteView: View {
                 Text("List of tags:")
                     .padding(.leading)
                
-                    GridTagList
+                GridTagList
            
             }
             
-            addNoteButton
+            // Update note button
+            updateNoteButton
+            
         }
         .frame(maxHeight: .infinity, alignment: .top)
-        .navigationTitle("Add Note")
-    }
-    
-    private func addTags(tag: Tags) {
-        // check if tag exists in array
-        
-        if selectedTags.contains(tag) {
-            selectedTags.remove(tag)
-        } else {
-            selectedTags.insert(tag)
-        }
-    }
-    
-    private func addNote() {
-        guard !noteTitle.isEmpty, !noteContent.isEmpty else { return }
-        let selectedTags = Array(selectedTags)
-        let newNote = Note(noteTitle: noteTitle, noteContent: noteContent, tags: selectedTags, noteAdded: noteAdded)
-        ctx.insert(newNote)
-        try! ctx.save()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            dismiss()
-        }
+        .navigationTitle("Update Note")
     }
 }
 
 #Preview {
-    AddNoteView()
+    UpdateNoteView(note: Note.sampleNotes[1])
 }
 
-
-extension AddNoteView {
+extension UpdateNoteView {
     private var GridTagList: some View {
         LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 4), spacing: 10) {
             ForEach(Tags.allCases, id: \.rawValue) { tag in
                 var isTagSelected: Bool {
-                    selectedTags.contains(tag)
+                    note.tags.contains(tag)
                 }
                 Text(tag.rawValue)
                     .font(.footnote)
@@ -91,21 +64,26 @@ extension AddNoteView {
                             .stroke(tag.tagColor, lineWidth: isTagSelected ? 2 : 0)
                     })
                     .onTapGesture {
-                        withAnimation(.bouncy) {
-                            addTags(tag: tag)
+                        withAnimation(.smooth) {
+                            if note.tags.contains(tag) {
+                                note.tags.removeAll { $0 == tag }
+                            } else {
+                                note.tags.append(tag)
+                            }
                         }
                     }
+                   
             }
         }
         .padding(.horizontal)
         .foregroundStyle(.secondary)
     }
     
-    private var addNoteButton: some View {
+    private var updateNoteButton: some View {
         Button {
-            addNote()
+            dismiss()
         } label: {
-            Text("Add Note")
+            Text("Update Note")
                 .fontWeight(.semibold)
         }
         .frame(maxWidth: .infinity)
@@ -114,7 +92,5 @@ extension AddNoteView {
         .padding(.horizontal, 30)
         .buttonStyle(.plain)
         .padding(.top, 20)
-        .disableWithOpacity(status: noteTitle.isEmpty || noteContent.isEmpty)
     }
-    
 }

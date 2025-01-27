@@ -17,4 +17,8 @@ struct NoteTakingApp: App {
         .modelContainer(for: Note.self)
     }
     
+    init() {
+        print(URL.applicationSupportDirectory.path(percentEncoded: false))
+    }
+    
 }

@@ -10,47 +10,58 @@ import SwiftData
 
 struct NoteCell: View {
     var note: Note
+    let onNotePressed: () -> Void
     var body: some View {
-        HStack(alignment: .top) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text(note.noteTitle)
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                
-                Text(note.noteContent)
-                    .font(.subheadline)
-                
-                HStack {
-                    ForEach(note.tags, id: \.rawValue) { tag in
-                        Text("#" + tag.rawValue)
-                            .font(.caption)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 4)
-                            .background(tag.tagColor.opacity(0.2), in: .rect(cornerRadius: 10))
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(tag.tagColor, lineWidth: 0.5)
-                            }
-                    }
-                }
-                
+        
+        Button {
+            withAnimation(.smooth(duration: 0.25)) {
+                onNotePressed()
             }
             
-            Spacer()
-            
-            Text(note.noteAdded.formatDate("HH:MM aa"))
-                .font(.caption)
-            
-            
+        } label: {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(note.noteTitle)
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                    
+                    Text(note.noteContent)
+                        .font(.subheadline)
+                    
+                    HStack {
+                        ForEach(note.tags, id: \.rawValue) { tag in
+                            Text("#" + tag.rawValue)
+                                .font(.caption)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 4)
+                                .background(tag.tagColor.opacity(0.2), in: .rect(cornerRadius: 10))
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(tag.tagColor, lineWidth: 0.5)
+                                }
+                        }
+                    }
+                    
+                }
+                
+                Spacer()
+                
+                Text(note.noteAdded.formatDate("HH:MM aa"))
+                    .font(.caption)
+                
+            }
+            .padding(15)
+            .background(.ultraThinMaterial, in: .rect(cornerRadius: 10))
+            .padding(.horizontal)
         }
-        .padding(15)
-        .background(.ultraThinMaterial, in: .rect(cornerRadius: 10))
-        .padding(.horizontal)
+        .buttonStyle(BouncyButtonStyle())
     }
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-    NoteCell(note: Note.sampleNotes[2])
+    NoteCell(note: Note.sampleNotes[2]) {
+        //
+    }
 }
 
 

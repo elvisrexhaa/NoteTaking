@@ -11,8 +11,10 @@ import SwiftData
 struct HomeView: View {
     
     @State private var showAddNoteView: Bool = false
+    @State private var toBeUpdatedNote: Note?
     @Environment(\.modelContext) private var ctx
     @Query(sort: \Note.noteAdded) var notes: [Note]
+
     
     init() {
         let appearance = UINavigationBarAppearance()
@@ -33,7 +35,9 @@ struct HomeView: View {
                 } else {
                     ForEach(notes) { note in
                         // TODO: note cell
-                        NoteCell(note: note)
+                        NoteCell(note: note) {
+                            toBeUpdatedNote = note
+                        }
                     }
                 }
                 
@@ -59,6 +63,9 @@ struct HomeView: View {
                     AddNoteView()
                        
                 }
+            }
+            .sheet(item: $toBeUpdatedNote) { note in
+                UpdateNoteView(note: note)
             }
         }
     }
