@@ -11,6 +11,7 @@ import SwiftData
 struct UpdateNoteView: View {
     @Bindable var note: Note
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var ctx
     
     var body: some View {
         VStack(spacing: 12) {
@@ -19,9 +20,9 @@ struct UpdateNoteView: View {
             CustomTextField(placeholder: "Note content" ,textBinding: $note.noteContent)
                 .lineLimit(8, reservesSpace: true)
             
-            DatePicker("Date:", selection: $note.noteAdded, displayedComponents: [.date, .hourAndMinute])
-                .padding(.horizontal)
-                .foregroundStyle(.primary)
+//            DatePicker("Date:", selection: $note.noteAdded, displayedComponents: [.date, .hourAndMinute])
+//                .padding(.horizontal)
+//                .foregroundStyle(.primary)
             
             // list of tags
             VStack(alignment: .leading, spacing: 10) {
@@ -34,6 +35,10 @@ struct UpdateNoteView: View {
             
             // Update note button
             updateNoteButton
+            
+            // Delete note button
+            deleteNoteButton
+                .padding(.top, -20)
             
         }
         .frame(maxHeight: .infinity, alignment: .top)
@@ -77,6 +82,9 @@ extension UpdateNoteView {
         }
         .padding(.horizontal)
         .foregroundStyle(.secondary)
+        .padding(.vertical)
+        .background(.ultraThinMaterial, in: .rect(cornerRadius: 10))
+        .padding(.horizontal, 10)
     }
     
     private var updateNoteButton: some View {
@@ -92,5 +100,24 @@ extension UpdateNoteView {
         .padding(.horizontal, 30)
         .buttonStyle(.plain)
         .padding(.top, 20)
+        .buttonStyle(BouncyButtonStyle())
+    }
+    
+    private var deleteNoteButton: some View {
+        Button {
+            dismiss()
+            ctx.delete(note)
+        } label: {
+            Text("Delete Note")
+                .fontWeight(.semibold)
+                .foregroundStyle(.white)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .background(.red, in: .rect(cornerRadius: 10))
+        .padding(.horizontal, 30)
+        .buttonStyle(.plain)
+        .padding(.top, 20)
+        .buttonStyle(BouncyButtonStyle())
     }
 }

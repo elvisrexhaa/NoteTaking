@@ -18,7 +18,7 @@ class Note {
     init(noteTitle: String, noteContent: String, tags: [Tags], noteAdded: Date = .now) {
         self.noteTitle = noteTitle
         self.noteContent = noteContent
-        self.tagValues = tags.map { $0.rawValue }
+        self.tagValues = tags.map({ $0.rawValue })
         self.noteAdded = noteAdded
     }
     

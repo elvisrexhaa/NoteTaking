@@ -20,7 +20,11 @@ struct NoteCell: View {
             
         } label: {
             HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(note.noteAdded.formatDate("dd MMM YYYY (HH:MM aa)"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    
                     Text(note.noteTitle)
                         .font(.title3)
                         .fontWeight(.semibold)
@@ -44,11 +48,26 @@ struct NoteCell: View {
                     
                 }
                 
-                Spacer()
+                Spacer(minLength: 0)
                 
-                Text(note.noteAdded.formatDate("HH:MM aa"))
-                    .font(.caption)
-                
+                Menu {
+                    // Multiple buttons here
+                    Button(role: .destructive) {
+                        //
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+
+                    Button {
+                        // delete note here
+                    } label: {
+                        Label("Update", systemImage: "arrow.up.doc.on.clipboard")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .padding(.top, 6)
+                        .foregroundStyle(.secondary)
+                }
             }
             .padding(15)
             .background(.ultraThinMaterial, in: .rect(cornerRadius: 10))
@@ -59,7 +78,7 @@ struct NoteCell: View {
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-    NoteCell(note: Note.sampleNotes[2]) {
+    NoteCell(note: Note.sampleNotes[0]) {
         //
     }
 }

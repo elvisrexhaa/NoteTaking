@@ -56,7 +56,7 @@ struct AddNoteView: View {
     
     private func addNote() {
         guard !noteTitle.isEmpty, !noteContent.isEmpty else { return }
-        let selectedTags = Array(selectedTags)
+        let selectedTags = Array(selectedTags) as [Tags]
         let newNote = Note(noteTitle: noteTitle, noteContent: noteContent, tags: selectedTags, noteAdded: noteAdded)
         ctx.insert(newNote)
         try! ctx.save()

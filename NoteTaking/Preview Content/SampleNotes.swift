@@ -11,7 +11,7 @@ import Foundation
 extension Note {
     static let sampleNotes: [Note] = [
         Note(noteTitle: "Note 1", noteContent: "Content for note 1", tags: [
-            .health, .journal, .travel
+            .health, .journal, .travel, .shopping, .ideas
         ], noteAdded: .now),
         Note(noteTitle: "Note 2", noteContent: "Content for note 2", tags: [
             .work, .journal

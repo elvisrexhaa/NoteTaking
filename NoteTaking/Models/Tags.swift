@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 
-enum Tags: String, CaseIterable {
+enum Tags: String, CaseIterable, Codable {
     case journal = "Journal"
     case work = "Work"
     case ideas = "Ideas"

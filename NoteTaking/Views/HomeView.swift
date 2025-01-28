@@ -65,7 +65,9 @@ struct HomeView: View {
                 }
             }
             .sheet(item: $toBeUpdatedNote) { note in
-                UpdateNoteView(note: note)
+                NavigationStack {
+                    UpdateNoteView(note: note)
+                }
             }
         }
     }
